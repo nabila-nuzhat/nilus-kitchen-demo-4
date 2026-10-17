@@ -1,0 +1,9 @@
+Database B — MongoDB Atlas -----------------------------
+1. Create an Atlas cluster.
+2. Create a database user with a strong password.
+3. Add your development IP to the network access list.
+4. Obtain the Node.js connection string.
+5. Set MONGODB_URI to the Atlas URI, including the correct username, password and database name.
+6. Keep the URI private.
+When deployed, configure MONGODB_URI in Vercel rather than using the local .env file.
+Important: Vercel cannot connect to 127.0.0.1 on your personal computer as your production database. A deployed application needs a database reachable from the deployed environment, such as Atlas.
