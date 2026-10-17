@@ -3,7 +3,8 @@
 
 ## Change Owner Model name -> User Model
 ## Room for more role -> like moderator to operate Later 
-
+## A security note: 
+    The registration code should be checked on the backend, never exposed in React frontend code. For a production owner account, also consider disabling public registration after the initial owner account is created.
 
 ## Check for Pending Email Verification option + Expiry time LATER UPDATE:
     emailVerificationTokenHash:{
