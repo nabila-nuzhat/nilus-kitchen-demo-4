@@ -1,0 +1,5 @@
+CUSTOM ID Notes -----------------------
+
+1. Later check to update Food Items' Custom ID Prefix by adding Category Prefix 
+eg. NK_FOOD_Prefix of the Category
+    NK_FOOD_DESS
