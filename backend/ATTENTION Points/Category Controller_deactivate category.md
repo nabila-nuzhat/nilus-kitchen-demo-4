@@ -1,0 +1,2 @@
+## One improvement for the completed application: 
+    before deleting a category, check whether food items still reference it. In that case, return 409 Conflict or require the owner to __"deactivate the category"__ instead. Historical orders should never be deleted merely because a category is removed.
