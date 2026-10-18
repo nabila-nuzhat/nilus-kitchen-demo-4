@@ -1,0 +1,2 @@
+## Axios Instance (api file):
+* Because every dashboard page needs these same things, create one configured axios instance __(api file)__ and reuse it everywhere, instead of repeating the URL and token logic in every component.

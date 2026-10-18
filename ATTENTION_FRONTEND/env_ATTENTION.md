@@ -1,0 +1,2 @@
+## ???? what other values + variables needed in frontend .env?
+## ???? does dotenv needed to be installed separately in Frontend?????
