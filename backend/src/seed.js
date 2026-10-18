@@ -4,6 +4,8 @@
  * In MongoDB Compass inspect the nilus_kitchen database. should see the categories, food items, customers and counters collections after the script runs.
  * 
  * This seed script is designed to avoid inserting duplicate sample records when run again. It does not create an owner account; register and verify the owner through the authentication API.
+ * 
+ * ??????????? "Description" field in fooditems???????????// 
  */
 
 import "dotenv/config";
@@ -100,7 +102,8 @@ async function seed() {
           isDefault: true
         },
         {
-          label: "Office",
+        //   label: "Office", // suggested
+          label: "Event Venue", // nilus kitchen 
           addressLine: "Office 2, Road 8",
           area: "Dhanmondi",
           city: "Dhaka",
