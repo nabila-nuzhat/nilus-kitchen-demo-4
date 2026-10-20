@@ -1,0 +1,1 @@
+## storing JWTs in localStorage exposes them to JavaScript running on that origin. If an attacker exploits a cross-site scripting (XSS) vulnerability, a token can be stolen. For a learning project this illustrates the flow, but production authentication needs careful storage and XSS protections.

@@ -1,4 +1,14 @@
-import { useState, useEf } from 'react'
+/** ATTENTION, ISSUES, NOTES--------- 
+ * 
+ * 
+ * 
+ * 
+ * 
+*/
+
+import { useEffect, useState } from "react";
+import api from "./api";
+// import "./style.css;
 
 function App() {
   const [token, setToken] = useState(
@@ -6,16 +16,19 @@ function App() {
   );
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [section, setSection] = useState("overview");
+  const [section, setSection] = useState("overview"); // //Selects the visible dashboard section????? why "overview" written????????
   const [customers, setCustomers] = useState([]);
   const [foods, setFoods] = useState([]);
   const [orders, setOrders] = useState([]);
   const [message, setMessage] = useState("");
+  // ???????????? why catagory not here???? 
 
-  async function loadDashboard() {
+
+// // loadDashboard(): retrieving data from the backend
+  async function loadDashboard() { 
     try {
       const [customerResponse, foodResponse, orderResponse] =
-        await Promise.all([
+        await Promise.all([ // ????????? why customers, foods, orders needs to be inside 1 single Promise? why not separate???????????
           api.get("/customers"),
           api.get("/foods"),
           api.get("/orders")
@@ -26,20 +39,26 @@ function App() {
       setOrders(orderResponse.data);
     } catch (error) {
       setMessage(
-        error.response?.data?.message || "Could not load dashboard"
+        error.response?.data?.message || "Could not load dashboard" // // more deep dive???????
       );
     }
   }
 
+  // // useEffect() : automatically loading the dashboard
   useEffect(() => {
     if (token) {
-      loadDashboard();
+      loadDashboard(); // // Check NOTES, ATTENTION
     }
   }, [token]);
 
-  async function handleLogin(event) {
-    event.preventDefault();
-    setMessage("");
+
+// handleLogin(): connecting the login form to the API
+// // "event" is a browser form-submission event, passed by React to the handler.
+// // // Normally, submitting a browser form can trigger a page navigation or reload. preventDefault() stops that default action, allowing React to handle the submission and send an Axios request without intentionally reloading the page.
+// // // The shorter { email, password } syntax is called object property shorthand. When a property name matches the variable name, you can write it once (it's the second argument is a JavaScript object: {email: email,password: password})
+  async function handleLogin(event) { 
+    event.preventDefault(); 
+    setMessage(""); // ///............ removes the previous success or error message before attempting the next login. 
 
     try {
       const response = await api.post("/auth/login", {
@@ -47,6 +66,8 @@ function App() {
         password
       });
 
+  // Saving the returned token
+      // // // localStorage.setItem(...)	Saves the token in browser storage
       localStorage.setItem("nilus_token", response.data.token);
       setToken(response.data.token);
       setMessage("Welcome to Nilus Kitchen.");
