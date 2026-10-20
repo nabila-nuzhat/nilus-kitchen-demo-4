@@ -6,3 +6,7 @@ Definition: the maximum time in milliseconds (number) axios waits for a response
 const api = axios.create({ baseURL: "...", timeout: 10000 }); // 10 seconds
 
 __Why needed:__ if the server is slow or down, your dashboard would show a loading spinner forever. A timeout lets you show “Server not responding, try again.” Your current code has no timeout, so adding timeout: 10000 is a good improvement.
+
+## A production deployment_HTTP-only cookie:
+A production deployment should use an appropriately configured secure, __HTTP-only cookie__ or another carefully reviewed session approach.
+For this beginner demo, the JWT is stored in __localStorage__. That is easy to understand but vulnerable if an attacker can execute JavaScript on your site.

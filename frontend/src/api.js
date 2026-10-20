@@ -6,6 +6,13 @@
  * "Content-Type": "application/json": Future NOTE:
         bcz uploading Image files, PDFs -> binary data (File, Blob) -> these need FormData
  * 
+ * Axios provides a reusable HTTP client. The interceptor attaches the JWT to protected requests so you don't need to write the authorization header repeatedly.
+
+      For this beginner demo, the JWT is stored in localStorage. That is easy to understand but vulnerable if an attacker can execute JavaScript on your site. A production deployment should use an appropriately configured secure, HTTP-only cookie or another carefully reviewed session approach.
+ * 
+ * 
+ * 
+
  */
 
 
