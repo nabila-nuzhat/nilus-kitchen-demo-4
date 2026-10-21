@@ -57,10 +57,3 @@ __Security detail:__ the frontend should not generate the JWT or decide whether 
 
 
 
-## 19. A few important technical improvements to keep in mind
-the code is a useful learning example. Before treating it as a production dashboard, consider these points:
-1. Check API response shapes. Your JSX expects specific properties such as grandTotal, orderStatus, customerName and phone. Make sure your backend controllers return them, or adapt the frontend to the actual responses.
-2. Protect every backend route. Hiding the dashboard when token is empty is a UI behavior, not authorization. The backend must validate the JWT and enforce owner permissions.
-3. Handle token expiry. If a saved token expires, protected requests may fail. The frontend should handle authentication errors and return the user to login when appropriate.
-4. Validate data types. Prices and totals should be valid numeric values. Format them safely and ensure the backend validates incoming order data.
-5. Avoid duplicate or stale requests. For a more robust implementation, consider effect cleanup, request cancellation or a data-fetching strategy as the application grows.

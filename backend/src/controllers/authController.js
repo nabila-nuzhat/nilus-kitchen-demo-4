@@ -133,6 +133,22 @@ export async function login(req, res, next) {
       });
     }
 
+// TESTING "OWNER_REGISTRATION_CODE" START**********************************************
+//     console.log(
+//       "Owner registration code loaded:",
+//       Boolean(process.env.OWNER_REGISTRATION_CODE)
+//     );
+
+//     console.log(
+//       "Submitted code length:",
+//       registrationCode?.length
+//     );
+
+//     console.log(
+//       "Expected code length:",
+//       process.env.OWNER_REGISTRATION_CODE?.length
+// );
+// TESTING "OWNER_REGISTRATION_CODE" END **********************************************
     const passwordMatches = await bcrypt.compare(
       password,
       owner.passwordHash
