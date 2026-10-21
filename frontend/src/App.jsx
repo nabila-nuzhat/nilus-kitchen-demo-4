@@ -52,7 +52,7 @@ function App() {
   }, [token]);
 
 
-// handleLogin(): connecting the login form to the API
+// connecting the login form to the API : handleLogin():
 // // "event" is a browser form-submission event, passed by React to the handler.
 // // // Normally, submitting a browser form can trigger a page navigation or reload. preventDefault() stops that default action, allowing React to handle the submission and send an Axios request without intentionally reloading the page.
 // // // The shorter { email, password } syntax is called object property shorthand. When a property name matches the variable name, you can write it once (it's the second argument is a JavaScript object: {email: email,password: password})
@@ -61,13 +61,15 @@ function App() {
     setMessage(""); // ///............ removes the previous success or error message before attempting the next login. 
 
     try {
-      const response = await api.post("/auth/login", {
+      const response = await api.post("/auth/login", { // // Sending the login request
         email,
         password
       });
 
   // Saving the returned token
       // // // localStorage.setItem(...)	Saves the token in browser storage
+      // // // setToken(...) : Updates React state so the UI switches to the authenticated view
+      // // // setMessage(...) : Displays a success message
       localStorage.setItem("nilus_token", response.data.token);
       setToken(response.data.token);
       setMessage("Welcome to Nilus Kitchen.");
@@ -87,9 +89,10 @@ function App() {
     setMessage("Logged out.");
   }
 
+  // // confirmOrder(): changing an order through the backend 
   async function confirmOrder(orderId) {
     try {
-      await api.patch(`/orders/${orderId}/confirm`);
+      await api.patch(`/orders/${orderId}/confirm`); // ????? why patch here in saving order?????? // ???? check if "orderId" is the custom or MongoDb?????
       setMessage("Order confirmed.");
       await loadDashboard();
     } catch (error) {
@@ -99,21 +102,23 @@ function App() {
     }
   }
 
+
+// receiving a PDF from the API
   async function downloadReceipt(orderId) {
     try {
       const response = await api.get(
         `/orders/${orderId}/receipt.pdf`,
-        { responseType: "blob" }
+        { responseType: "blob" } // // ??? check compatibility with backend for "blob"
       );
-
-      const url = URL.createObjectURL(response.data);
-      const link = document.createElement("a");
+// Creating a download link
+      const url = URL.createObjectURL(response.data); // // URL.createObjectURL() creates a temporary browser URL pointing to the Blob data. It lets the browser access the downloaded file's contents.
+      const link = document.createElement("a"); // // creates an anchor element.
 
       link.href = url;
       link.download = `${orderId}-receipt.pdf`;
       link.click();
 
-      URL.revokeObjectURL(url);
+      URL.revokeObjectURL(url); // // CHECK the ATTENTION file of App.jsx FOR UPDATED SAFER OPTION with "timeout" TRY LATER......
     } catch (error) {
       setMessage(
         error.response?.data?.message || "Receipt download failed"
@@ -145,7 +150,7 @@ function App() {
           />
 
           <button type="submit">Log in</button>
-          {message && <p role="status">{message}</p>}
+          {message && <p role="status">{message}</p>} // ?? why "status"?????
         </form>
       </main>
     );
