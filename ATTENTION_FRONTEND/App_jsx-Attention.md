@@ -1,6 +1,7 @@
 ## MAJOR CORRECTION in App.jsx CHECK FOR COMPATIBILITY WITH BACKEND
-__/** CORRECTED APP.JSX ========================================================================================= AFTER CORRECTION ===== ADDING MISSING CATEGORY SECTION */__
+__/** CORRECTED 1_APP.JSX ========================================================================================= AFTER CORRECTION ===== ADDING MISSING CATEGORY */__
 /** INITIAL APP.JSX ========================================================================================= BEFORE CORRECTION: MISSING CATEGORY SECTION */
+__/** CORRECTED 2_APP.JSX ========================================================================================= AFTER CORRECTION ===== ADDING MISSING CATEGORY + REGISTER */__
 
 ## This is an illustrative example of the shape the current JSX expects, not a claim that your backend currently returns exactly these fields. ???????????????? what does it mean?
     5.4 Customer, food and order arrays

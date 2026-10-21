@@ -323,7 +323,648 @@
 
 
 
-/** CORRECTED APP.JSX ========================================================================================= AFTER CORRECTION ===== ADDING MISSING CATEGORY */
+/** CORRECTED 1_APP.JSX ========================================================================================= AFTER CORRECTION ===== ADDING MISSING CATEGORY */
+
+
+// import { useEffect, useState } from "react";
+// import api from "./api";
+// import "./style.css";
+
+// export default function App() {
+//   // Authentication
+//   const [token, setToken] = useState(
+//     localStorage.getItem("nilus_token") || ""
+//   );
+//   const [email, setEmail] = useState("");
+//   const [password, setPassword] = useState("");
+
+//   // Dashboard navigation
+//   const [section, setSection] = useState("overview");
+
+//   // Data received from the backend
+//   const [customers, setCustomers] = useState([]);
+//   const [categories, setCategories] = useState([]);
+//   const [foods, setFoods] = useState([]);
+//   const [orders, setOrders] = useState([]);
+
+//   // Category form
+//   const [categoryName, setCategoryName] = useState("");
+//   const [categoryDescription, setCategoryDescription] = useState("");
+
+//   // User feedback
+//   const [message, setMessage] = useState("");
+//   const [loading, setLoading] = useState(false);
+
+//   // Load dashboard data from the backend
+//   async function loadDashboard() {
+//     setLoading(true);
+
+//     try {
+//       const [
+//         customerResponse,
+//         categoryResponse,
+//         foodResponse,
+//         orderResponse
+//       ] = await Promise.all([
+//         api.get("/customers"),
+//         api.get("/categories"),
+//         api.get("/foods"),
+//         api.get("/orders")
+//       ]);
+
+//       setCustomers(customerResponse.data);
+//       setCategories(categoryResponse.data);
+//       setFoods(foodResponse.data);
+//       setOrders(orderResponse.data);
+//     } catch (error) {
+//       setMessage(
+//         error.response?.data?.message ||
+//           "Could not load dashboard data. Please check the backend."
+//       );
+//     } finally {
+//       setLoading(false);
+//     }
+//   }
+
+//   // Load data after a token is available
+//   useEffect(() => {
+//     if (token) {
+//       loadDashboard();
+//     }
+//   }, [token]);
+
+//   // Log in the owner
+//   async function handleLogin(event) {
+//     event.preventDefault();
+//     setMessage("");
+
+//     try {
+//       const response = await api.post("/auth/login", {
+//         email,
+//         password
+//       });
+
+//       const receivedToken = response.data.token;
+
+//       localStorage.setItem("nilus_token", receivedToken);
+//       setToken(receivedToken);
+//       setPassword("");
+//       setMessage("Welcome to Nilus Kitchen.");
+//     } catch (error) {
+//       setMessage(
+//         error.response?.data?.message || "Login failed."
+//       );
+//     }
+//   }
+
+//   // Log out the owner
+//   function logout() {
+//     localStorage.removeItem("nilus_token");
+
+//     setToken("");
+//     setCustomers([]);
+//     setCategories([]);
+//     setFoods([]);
+//     setOrders([]);
+//     setPassword("");
+//     setMessage("Logged out.");
+//     setSection("overview");
+//   }
+
+//   // Create a new category
+//   async function createCategory(event) {
+//     event.preventDefault();
+//     setMessage("");
+
+//     try {
+//       await api.post("/categories", {
+//         name: categoryName.trim(),
+//         description: categoryDescription.trim()
+//       });
+
+//       setCategoryName("");
+//       setCategoryDescription("");
+//       setMessage("Category created successfully.");
+
+//       await loadDashboard();
+//     } catch (error) {
+//       setMessage(
+//         error.response?.data?.message ||
+//           "Could not create category."
+//       );
+//     }
+//   }
+
+//   // Confirm a draft order
+//   async function confirmOrder(orderId) {
+//     setMessage("");
+
+//     try {
+//       await api.patch(`/orders/${orderId}/confirm`);
+
+//       setMessage("Order confirmed.");
+//       await loadDashboard();
+//     } catch (error) {
+//       setMessage(
+//         error.response?.data?.message ||
+//           "Could not confirm order."
+//       );
+//     }
+//   }
+
+//   // Download a confirmed order's PDF receipt
+//   async function downloadReceipt(orderId) {
+//     setMessage("");
+
+//     try {
+//       const response = await api.get(
+//         `/orders/${orderId}/receipt.pdf`,
+//         { responseType: "blob" }
+//       );
+
+//       const url = URL.createObjectURL(response.data);
+//       const link = document.createElement("a");
+
+//       link.href = url;
+//       link.download = `${orderId}-receipt.pdf`;
+
+//       document.body.appendChild(link);
+//       link.click();
+//       link.remove();
+
+//       URL.revokeObjectURL(url);
+//     } catch (error) {
+//       setMessage(
+//         error.response?.data?.message ||
+//           "Receipt download failed."
+//       );
+//     }
+//   }
+
+//   // Find the category name for a food item.
+//   // Supports populated category data or a categoryId reference.
+//   function getCategoryName(food) {
+//     if (food.category?.name) {
+//       return food.category.name;
+//     }
+
+//     if (food.categoryName) {
+//       return food.categoryName;
+//     }
+
+//     const matchingCategory = categories.find(
+//       (category) =>
+//         category._id === food.categoryId ||
+//         category.categoryId === food.categoryId
+//     );
+
+//     return matchingCategory?.name || "Not available";
+//   }
+
+//   // Login screen
+//   if (!token) {
+//     return (
+//       <>
+//         <main className="login-page">
+//           <form className="login-card" onSubmit={handleLogin}>
+//             <div className="brand-mark">NK</div>
+
+//             <h1>Nilus Kitchen</h1>
+//             <p className="muted">Owner dashboard</p>
+
+//             <label htmlFor="loginEmail">Email</label>
+//             <input
+//               id="loginEmail"
+//               type="email"
+//               value={email}
+//               onChange={(event) => setEmail(event.target.value)}
+//               placeholder="Enter your email"
+//               autoComplete="username"
+//               required
+//             />
+
+//             <label htmlFor="loginPassword">Password</label>
+//             <input
+//               id="loginPassword"
+//               type="password"
+//               value={password}
+//               onChange={(event) => setPassword(event.target.value)}
+//               placeholder="Enter your password"
+//               autoComplete="current-password"
+//               required
+//             />
+
+//             <button type="submit" className="primary-button">
+//               Log in
+//             </button>
+
+//             {message && (
+//               <p className="notice" role="status">
+//                 {message}
+//               </p>
+//             )}
+//           </form>
+//         </main>
+//       </>
+//     );
+//   }
+
+//   // Authenticated dashboard
+//   return (
+//     <>
+//       <div className="app-shell">
+//         <aside className="sidebar">
+//           <div className="sidebar-brand">
+//             <div className="brand-mark">NK</div>
+
+//             <div>
+//               <h2>Nilus Kitchen</h2>
+//               <p className="muted">Owner dashboard</p>
+//             </div>
+//           </div>
+
+//           <nav className="navigation" aria-label="Main navigation">
+//             {[
+//               "overview",
+//               "orders",
+//               "customers",
+//               "categories",
+//               "foods"
+//             ].map((item) => (
+//               <button
+//                 key={item}
+//                 type="button"
+//                 className={
+//                   section === item ? "nav-active" : "nav-button"
+//                 }
+//                 onClick={() => setSection(item)}
+//               >
+//                 {item[0].toUpperCase() + item.slice(1)}
+//               </button>
+//             ))}
+//           </nav>
+
+//           <button
+//             type="button"
+//             className="logout-button"
+//             onClick={logout}
+//           >
+//             Log out
+//           </button>
+//         </aside>
+
+//         <main className="main-content">
+//           <header className="page-header">
+//             <div>
+//               <p className="eyebrow">NILUS KITCHEN</p>
+
+//               <h1>
+//                 {section[0].toUpperCase() + section.slice(1)}
+//               </h1>
+
+//               <p className="muted">
+//                 Manage your business from one place.
+//               </p>
+//             </div>
+
+//             <button
+//               type="button"
+//               className="secondary-button"
+//               onClick={loadDashboard}
+//               disabled={loading}
+//             >
+//               {loading ? "Loading..." : "Refresh"}
+//             </button>
+//           </header>
+
+//           {message && (
+//             <p className="notice" role="status">
+//               {message}
+//             </p>
+//           )}
+
+//           {/* OVERVIEW */}
+//           {section === "overview" && (
+//             <section className="dashboard-section">
+//               <div className="welcome-panel">
+//                 <h2>Welcome back!</h2>
+//                 <p>
+//                   Manage orders, customers, food items and categories
+//                   from this dashboard.
+//                 </p>
+//               </div>
+
+//               <div className="stat-grid">
+//                 <Stat title="Orders" value={orders.length} />
+
+//                 <Stat
+//                   title="Customers"
+//                   value={customers.length}
+//                 />
+
+//                 <Stat
+//                   title="Categories"
+//                   value={categories.length}
+//                 />
+
+//                 <Stat
+//                   title="Food items"
+//                   value={foods.length}
+//                 />
+
+//                 <Stat
+//                   title="Confirmed orders"
+//                   value={
+//                     orders.filter(
+//                       (order) =>
+//                         order.orderStatus === "CONFIRMED"
+//                     ).length
+//                   }
+//                 />
+//               </div>
+
+//               <section className="panel">
+//                 <h2>Quick overview</h2>
+//                 <p>
+//                   Use the navigation menu to view your existing
+//                   records. To create a category, open Categories.
+//                 </p>
+//               </section>
+//             </section>
+//           )}
+
+//           {/* ORDERS */}
+//           {section === "orders" && (
+//             <section className="panel">
+//               <div className="section-heading">
+//                 <div>
+//                   <h2>Orders</h2>
+//                   <p className="muted">
+//                     Review orders, confirm drafts and download receipts.
+//                   </p>
+//                 </div>
+//               </div>
+
+//               {orders.length === 0 ? (
+//                 <EmptyState message="No orders found yet." />
+//               ) : (
+//                 <div className="record-list">
+//                   {orders.map((order) => (
+//                     <article className="record-card" key={order._id}>
+//                       <div className="record-header">
+//                         <h3>
+//                           Order {order.orderId || order._id}
+//                         </h3>
+
+//                         <span
+//                           className={`status status-${String(
+//                             order.orderStatus || "unknown"
+//                           ).toLowerCase()}`}
+//                         >
+//                           {order.orderStatus || "Unknown"}
+//                         </span>
+//                       </div>
+
+//                       <p>
+//                         <strong>Customer:</strong>{" "}
+//                         {order.customerName || "Not provided"}
+//                       </p>
+
+//                       <p>
+//                         <strong>Total:</strong>{" "}
+//                         ৳{Number(order.grandTotal ?? 0).toFixed(2)}
+//                       </p>
+
+//                       <div className="record-actions">
+//                         {order.orderStatus === "DRAFT" && (
+//                           <button
+//                             type="button"
+//                             onClick={() => confirmOrder(order._id)}
+//                           >
+//                             Confirm order
+//                           </button>
+//                         )}
+
+//                         {order.orderStatus === "CONFIRMED" && (
+//                           <button
+//                             type="button"
+//                             onClick={() => downloadReceipt(order._id)}
+//                           >
+//                             Download PDF receipt
+//                           </button>
+//                         )}
+//                       </div>
+//                     </article>
+//                   ))}
+//                 </div>
+//               )}
+//             </section>
+//           )}
+
+//           {/* CUSTOMERS */}
+//           {section === "customers" && (
+//             <section className="panel">
+//               <h2>Customers</h2>
+//               <p className="muted">
+//                 Customer records currently saved in your database.
+//               </p>
+
+//               {customers.length === 0 ? (
+//                 <EmptyState message="No customers found yet." />
+//               ) : (
+//                 <div className="record-list">
+//                   {customers.map((customer) => (
+//                     <article className="record-card" key={customer._id}>
+//                       <h3>{customer.name}</h3>
+
+//                       <p>
+//                         <strong>Customer ID:</strong>{" "}
+//                         {customer.customerId || customer._id}
+//                       </p>
+
+//                       <p>
+//                         <strong>Phone:</strong>{" "}
+//                         {customer.phone || "Not provided"}
+//                       </p>
+//                     </article>
+//                   ))}
+//                 </div>
+//               )}
+//             </section>
+//           )}
+
+//           {/* CATEGORIES */}
+//           {section === "categories" && (
+//             <section className="dashboard-section">
+//               <section className="panel">
+//                 <h2>Add a category</h2>
+
+//                 <p className="muted">
+//                   Create a category to organize your food menu.
+//                 </p>
+
+//                 <form
+//                   className="data-form"
+//                   onSubmit={createCategory}
+//                 >
+//                   <label htmlFor="categoryName">
+//                     Category name
+//                   </label>
+
+//                   <input
+//                     id="categoryName"
+//                     type="text"
+//                     value={categoryName}
+//                     onChange={(event) =>
+//                       setCategoryName(event.target.value)
+//                     }
+//                     placeholder="e.g. Rice Meals"
+//                     minLength={2}
+//                     maxLength={80}
+//                     required
+//                   />
+
+//                   <label htmlFor="categoryDescription">
+//                     Description (optional)
+//                   </label>
+
+//                   <textarea
+//                     id="categoryDescription"
+//                     value={categoryDescription}
+//                     onChange={(event) =>
+//                       setCategoryDescription(event.target.value)
+//                     }
+//                     placeholder="e.g. Rice-based meals"
+//                     rows={3}
+//                   />
+
+//                   <button
+//                     type="submit"
+//                     disabled={!categoryName.trim()}
+//                   >
+//                     Add category
+//                   </button>
+//                 </form>
+//               </section>
+
+//               <section className="panel">
+//                 <h2>Existing categories</h2>
+
+//                 <p className="muted">
+//                   Categories returned by your backend API.
+//                 </p>
+
+//                 {categories.length === 0 ? (
+//                   <EmptyState message="No categories found. Add your first category above." />
+//                 ) : (
+//                   <div className="record-list">
+//                     {categories.map((category) => (
+//                       <article
+//                         className="record-card"
+//                         key={category._id}
+//                       >
+//                         <div className="record-header">
+//                           <h3>{category.name}</h3>
+
+//                           <span
+//                             className={`status ${
+//                               category.isActive === false
+//                                 ? "status-inactive"
+//                                 : "status-active"
+//                             }`}
+//                           >
+//                             {category.isActive === false
+//                               ? "Inactive"
+//                               : "Active"}
+//                           </span>
+//                         </div>
+
+//                         {category.description && (
+//                           <p>{category.description}</p>
+//                         )}
+
+//                         <p className="muted record-id">
+//                           Category ID:{" "}
+//                           {category.categoryId || category._id}
+//                         </p>
+//                       </article>
+//                     ))}
+//                   </div>
+//                 )}
+//               </section>
+//             </section>
+//           )}
+
+//           {/* FOOD ITEMS */}
+//           {section === "foods" && (
+//             <section className="panel">
+//               <h2>Food items</h2>
+
+//               <p className="muted">
+//                 Existing menu items and their categories.
+//               </p>
+
+//               {foods.length === 0 ? (
+//                 <EmptyState message="No food items found yet." />
+//               ) : (
+//                 <div className="record-list">
+//                   {foods.map((food) => (
+//                     <article className="record-card" key={food._id}>
+//                       <h3>{food.name}</h3>
+
+//                       <p>
+//                         <strong>Food ID:</strong>{" "}
+//                         {food.foodId || food._id}
+//                       </p>
+
+//                       <p>
+//                         <strong>Category:</strong>{" "}
+//                         {getCategoryName(food)}
+//                       </p>
+
+//                       <p>
+//                         <strong>Unit:</strong>{" "}
+//                         {food.unit || "Not specified"}
+//                       </p>
+
+//                       <p className="food-price">
+//                         ৳{Number(food.price ?? 0).toFixed(2)}
+//                       </p>
+
+//                       {food.isAvailable === false && (
+//                         <span className="status status-inactive">
+//                           Unavailable
+//                         </span>
+//                       )}
+//                     </article>
+//                   ))}
+//                 </div>
+//               )}
+//             </section>
+//           )}
+//         </main>
+//       </div>
+//     </>
+//   );
+// }
+
+// // Reusable dashboard statistic card
+// function Stat({ title, value }) {
+//   return (
+//     <section className="stat-card">
+//       <p>{title}</p>
+//       <strong>{value}</strong>
+//     </section>
+//   );
+// }
+
+// // Reusable empty-list message
+// function EmptyState({ message }) {
+//   return <p className="empty-state">{message}</p>;
+// }
+
+
+/** CORRECTED 2_APP.JSX ========================================================================================= AFTER CORRECTION ===== ADDING MISSING CATEGORY + REGISTER */
 
 
 import { useEffect, useState } from "react";
@@ -338,24 +979,26 @@ export default function App() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  // Registration
+  const [isRegistering, setIsRegistering] = useState(false);
+  const [name, setName] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [registrationCode, setRegistrationCode] = useState("");
+
   // Dashboard navigation
   const [section, setSection] = useState("overview");
 
-  // Data received from the backend
+  // Data from the backend
   const [customers, setCustomers] = useState([]);
   const [categories, setCategories] = useState([]);
   const [foods, setFoods] = useState([]);
   const [orders, setOrders] = useState([]);
 
-  // Category form
-  const [categoryName, setCategoryName] = useState("");
-  const [categoryDescription, setCategoryDescription] = useState("");
-
   // User feedback
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // Load dashboard data from the backend
+  // Load dashboard data
   async function loadDashboard() {
     setLoading(true);
 
@@ -379,45 +1022,89 @@ export default function App() {
     } catch (error) {
       setMessage(
         error.response?.data?.message ||
-          "Could not load dashboard data. Please check the backend."
+          "Could not load dashboard data. Check your backend and login."
       );
     } finally {
       setLoading(false);
     }
   }
 
-  // Load data after a token is available
+  // Load dashboard data after login
   useEffect(() => {
     if (token) {
       loadDashboard();
     }
   }, [token]);
 
-  // Log in the owner
+  // Register a new owner
+  async function handleRegister(event) {
+    event.preventDefault();
+    setMessage("");
+
+    if (password !== confirmPassword) {
+      setMessage("Passwords do not match.");
+      return;
+    }
+
+    try {
+      const response = await api.post("/auth/register", {
+        name: name.trim(),
+        email: email.trim(),
+        password,
+        registrationCode
+      });
+
+      setMessage(
+        response.data?.message ||
+          "Registration received. Check your email to verify."
+      );
+
+      // Registration does not log the owner in.
+      // The owner must verify their email first.
+      setIsRegistering(false);
+      setName("");
+      setPassword("");
+      setConfirmPassword("");
+      setRegistrationCode("");
+    } catch (error) {
+      setMessage(
+        error.response?.data?.message ||
+          "Registration failed. Please try again."
+      );
+    }
+  }
+
+  // Log in an existing owner
   async function handleLogin(event) {
     event.preventDefault();
     setMessage("");
 
     try {
       const response = await api.post("/auth/login", {
-        email,
+        email: email.trim(),
         password
       });
 
       const receivedToken = response.data.token;
 
+      if (!receivedToken) {
+        setMessage("Login failed: no authentication token received.");
+        return;
+      }
+
       localStorage.setItem("nilus_token", receivedToken);
       setToken(receivedToken);
       setPassword("");
-      setMessage("Welcome to Nilus Kitchen.");
+      setMessage(response.data.message || "Login successful.");
     } catch (error) {
       setMessage(
-        error.response?.data?.message || "Login failed."
+        error.response?.data?.message ||
+          "Login failed. Check your email and password."
       );
     }
   }
 
-  // Log out the owner
+  // Log out
   function logout() {
     localStorage.removeItem("nilus_token");
 
@@ -427,11 +1114,11 @@ export default function App() {
     setFoods([]);
     setOrders([]);
     setPassword("");
-    setMessage("Logged out.");
     setSection("overview");
+    setMessage("Logged out.");
   }
 
-  // Create a new category
+  // Create a category
   async function createCategory(event) {
     event.preventDefault();
     setMessage("");
@@ -455,13 +1142,16 @@ export default function App() {
     }
   }
 
-  // Confirm a draft order
+  // Category form state
+  const [categoryName, setCategoryName] = useState("");
+  const [categoryDescription, setCategoryDescription] = useState("");
+
+  // Confirm an order
   async function confirmOrder(orderId) {
     setMessage("");
 
     try {
       await api.patch(`/orders/${orderId}/confirm`);
-
       setMessage("Order confirmed.");
       await loadDashboard();
     } catch (error) {
@@ -472,7 +1162,7 @@ export default function App() {
     }
   }
 
-  // Download a confirmed order's PDF receipt
+  // Download an order's PDF receipt
   async function downloadReceipt(orderId) {
     setMessage("");
 
@@ -501,8 +1191,7 @@ export default function App() {
     }
   }
 
-  // Find the category name for a food item.
-  // Supports populated category data or a categoryId reference.
+  // Find the category name associated with a food item
   function getCategoryName(food) {
     if (food.category?.name) {
       return food.category.name;
@@ -515,22 +1204,48 @@ export default function App() {
     const matchingCategory = categories.find(
       (category) =>
         category._id === food.categoryId ||
+        category._id === food.categoryId?._id ||
         category.categoryId === food.categoryId
     );
 
     return matchingCategory?.name || "Not available";
   }
 
-  // Login screen
+  // Login and registration screen
   if (!token) {
     return (
       <>
         <main className="login-page">
-          <form className="login-card" onSubmit={handleLogin}>
+          <form
+            className="login-card"
+            onSubmit={isRegistering ? handleRegister : handleLogin}
+          >
             <div className="brand-mark">NK</div>
 
             <h1>Nilus Kitchen</h1>
-            <p className="muted">Owner dashboard</p>
+
+            <p className="muted">
+              {isRegistering
+                ? "Create your owner account"
+                : "Owner dashboard"}
+            </p>
+
+            {isRegistering && (
+              <>
+                <label htmlFor="registerName">Full name</label>
+                <input
+                  id="registerName"
+                  type="text"
+                  value={name}
+                  onChange={(event) => setName(event.target.value)}
+                  placeholder="Enter your full name"
+                  autoComplete="name"
+                  minLength={2}
+                  maxLength={80}
+                  required
+                />
+              </>
+            )}
 
             <label htmlFor="loginEmail">Email</label>
             <input
@@ -539,7 +1254,7 @@ export default function App() {
               value={email}
               onChange={(event) => setEmail(event.target.value)}
               placeholder="Enter your email"
-              autoComplete="username"
+              autoComplete="email"
               required
             />
 
@@ -549,13 +1264,57 @@ export default function App() {
               type="password"
               value={password}
               onChange={(event) => setPassword(event.target.value)}
-              placeholder="Enter your password"
-              autoComplete="current-password"
+              placeholder={
+                isRegistering
+                  ? "Create a password (8–72 characters)"
+                  : "Enter your password"
+              }
+              autoComplete={
+                isRegistering ? "new-password" : "current-password"
+              }
+              minLength={isRegistering ? 8 : undefined}
+              maxLength={isRegistering ? 72 : undefined}
               required
             />
 
+            {isRegistering && (
+              <>
+                <label htmlFor="confirmPassword">
+                  Confirm password
+                </label>
+                <input
+                  id="confirmPassword"
+                  type="password"
+                  value={confirmPassword}
+                  onChange={(event) =>
+                    setConfirmPassword(event.target.value)
+                  }
+                  placeholder="Enter your password again"
+                  autoComplete="new-password"
+                  minLength={8}
+                  maxLength={72}
+                  required
+                />
+
+                <label htmlFor="registrationCode">
+                  Owner registration code
+                </label>
+                <input
+                  id="registrationCode"
+                  type="password"
+                  value={registrationCode}
+                  onChange={(event) =>
+                    setRegistrationCode(event.target.value)
+                  }
+                  placeholder="Enter your registration code"
+                  autoComplete="off"
+                  required
+                />
+              </>
+            )}
+
             <button type="submit" className="primary-button">
-              Log in
+              {isRegistering ? "Create account" : "Log in"}
             </button>
 
             {message && (
@@ -563,6 +1322,28 @@ export default function App() {
                 {message}
               </p>
             )}
+
+            <p className="auth-switch">
+              {isRegistering
+                ? "Already have an account?"
+                : "New to Nilus Kitchen?"}
+
+              {" "}
+
+              <button
+                type="button"
+                className="text-button"
+                onClick={() => {
+                  setIsRegistering(!isRegistering);
+                  setMessage("");
+                  setPassword("");
+                  setConfirmPassword("");
+                  setRegistrationCode("");
+                }}
+              >
+                {isRegistering ? "Log in" : "Register"}
+              </button>
+            </p>
           </form>
         </main>
       </>
@@ -656,28 +1437,14 @@ export default function App() {
 
               <div className="stat-grid">
                 <Stat title="Orders" value={orders.length} />
-
-                <Stat
-                  title="Customers"
-                  value={customers.length}
-                />
-
-                <Stat
-                  title="Categories"
-                  value={categories.length}
-                />
-
-                <Stat
-                  title="Food items"
-                  value={foods.length}
-                />
-
+                <Stat title="Customers" value={customers.length} />
+                <Stat title="Categories" value={categories.length} />
+                <Stat title="Food items" value={foods.length} />
                 <Stat
                   title="Confirmed orders"
                   value={
                     orders.filter(
-                      (order) =>
-                        order.orderStatus === "CONFIRMED"
+                      (order) => order.orderStatus === "CONFIRMED"
                     ).length
                   }
                 />
@@ -686,8 +1453,8 @@ export default function App() {
               <section className="panel">
                 <h2>Quick overview</h2>
                 <p>
-                  Use the navigation menu to view your existing
-                  records. To create a category, open Categories.
+                  Use the navigation menu to view your records.
+                  To create a category, open Categories.
                 </p>
               </section>
             </section>
@@ -696,14 +1463,10 @@ export default function App() {
           {/* ORDERS */}
           {section === "orders" && (
             <section className="panel">
-              <div className="section-heading">
-                <div>
-                  <h2>Orders</h2>
-                  <p className="muted">
-                    Review orders, confirm drafts and download receipts.
-                  </p>
-                </div>
-              </div>
+              <h2>Orders</h2>
+              <p className="muted">
+                Review orders, confirm drafts and download receipts.
+              </p>
 
               {orders.length === 0 ? (
                 <EmptyState message="No orders found yet." />
@@ -798,19 +1561,12 @@ export default function App() {
             <section className="dashboard-section">
               <section className="panel">
                 <h2>Add a category</h2>
-
                 <p className="muted">
                   Create a category to organize your food menu.
                 </p>
 
-                <form
-                  className="data-form"
-                  onSubmit={createCategory}
-                >
-                  <label htmlFor="categoryName">
-                    Category name
-                  </label>
-
+                <form className="data-form" onSubmit={createCategory}>
+                  <label htmlFor="categoryName">Category name</label>
                   <input
                     id="categoryName"
                     type="text"
@@ -827,7 +1583,6 @@ export default function App() {
                   <label htmlFor="categoryDescription">
                     Description (optional)
                   </label>
-
                   <textarea
                     id="categoryDescription"
                     value={categoryDescription}
@@ -835,6 +1590,7 @@ export default function App() {
                       setCategoryDescription(event.target.value)
                     }
                     placeholder="e.g. Rice-based meals"
+                    maxLength={500}
                     rows={3}
                   />
 
@@ -849,10 +1605,6 @@ export default function App() {
 
               <section className="panel">
                 <h2>Existing categories</h2>
-
-                <p className="muted">
-                  Categories returned by your backend API.
-                </p>
 
                 {categories.length === 0 ? (
                   <EmptyState message="No categories found. Add your first category above." />
@@ -899,7 +1651,6 @@ export default function App() {
           {section === "foods" && (
             <section className="panel">
               <h2>Food items</h2>
-
               <p className="muted">
                 Existing menu items and their categories.
               </p>

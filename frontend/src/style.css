@@ -1,4 +1,4 @@
-/* css AFTER CORRECTING MISSING CATEGORY SECTION in App.jsx */
+/* css-2 AFTER CORRECTING MISSING CATEGORY + REGISTER SECTION in App.jsx */
 /* ========================================
    1. Global styles
 ======================================== */
@@ -8,7 +8,9 @@
 }
 
 :root {
-  --brand-red: #e60000;
+  /* --brand-red: #e60000;  */ /* previous shade */
+  --brand-red: #8b261e;  /*Brick Red*/
+  /*--brand-red: #a60000;*/ /*Crimson Red*/
   --cream: #F5f2e9;
   --text: #333333;
   --muted: #737373;
@@ -126,7 +128,7 @@ p {
 }
 
 /* ========================================
-   2. Login page
+   2. Login and registration page
 ======================================== */
 
 .login-page {
@@ -138,7 +140,7 @@ p {
 
 .login-card {
   width: 100%;
-  max-width: 390px;
+  max-width: 430px;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -153,7 +155,7 @@ p {
   margin-bottom: 0;
 }
 
-.login-card > p {
+.login-card > p.muted {
   margin-bottom: 4px;
 }
 
@@ -179,6 +181,27 @@ p {
 .primary-button {
   width: 100%;
   margin-top: 6px;
+}
+
+.auth-switch {
+  margin: 8px 0 0;
+  text-align: center;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.text-button {
+  display: inline;
+  padding: 0;
+  background: transparent;
+  color: var(--brand-red);
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+.text-button:hover:not(:disabled) {
+  background: transparent;
+  opacity: 0.75;
 }
 
 /* ========================================
