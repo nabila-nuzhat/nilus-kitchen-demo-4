@@ -1,0 +1,1 @@
+## if  ever pass own headers inside options, it replaces the whole default headers object (spread is shallow), so it'd lose Content-Type. Fine for now.
